@@ -15,22 +15,13 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => { //related to socket in html file
 	console.log('New user connected');
 
-	socket.on('createMessage', (message) => {
+	socket.on('createMessage', (message, callback) => {
 		console.log('createMessage', message);
 
 		//sockit.emit from admin and text
-		socket.emit('newMessage', generateMessage('Admin', 'Welcome to chat'));
-
-		//socket.broadcast.emit from admin text new user joined
-		socket.broadcast.emit('newMessage', {
-			from: 'Admin',
-			text: 'New user join now',
-			createdAt: new Date().getTime()
-		});
-
-
+		// socket.emit('newMessage', generateMessage('Admin', 'Welcome to chat'));
 		io.emit('newMessage', generateMessage(message.from, message.text));
-
+		callback();
 		//send message from one way and reseve it from one way , so open two tabbs and check
 		// socket.broadcast.emit('newMessage', {
 		// 	from: message.from,
@@ -41,7 +32,7 @@ io.on('connection', (socket) => { //related to socket in html file
 
 	socket.on('disconnect', () => {
 		console.log('User was connect');
-	})
+	});
 });
 
 server.listen(port, () => {
