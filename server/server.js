@@ -18,15 +18,15 @@ io.on('connection', (socket) => { //related to socket in html file
 	socket.on('createMessage', (message, callback) => {
 		console.log('createMessage', message);
 
-		//sockit.emit from admin and text
+		// sockit.emit from admin and text
 		// socket.emit('newMessage', generateMessage('Admin', 'Welcome to chat'));
 		io.emit('newMessage', generateMessage(message.from, message.text));
 		callback();
-		//send message from one way and reseve it from one way , so open two tabbs and check
+		// send message from one way and reseve it from one way , so open two tabbs and check
 		// socket.broadcast.emit('newMessage', {
-		// 	from: message.from,
-		// 	text: message.text,
-		// 	createdAt: new Date().getTime()
+		// from: message.from,
+		// text: message.text,
+		// createdAt: new Date().getTime()
 		// });
 	});
 
