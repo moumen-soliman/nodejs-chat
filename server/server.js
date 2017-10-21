@@ -4,6 +4,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
+const {isRealString} = require('./utils/validation');
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
 var app = express();
@@ -15,19 +16,29 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => { //related to socket in html file
 	console.log('New user connected');
 
+
+	socket.on('join', (params, callback) => {
+		if (!isRealString(params.name) || !isRealString(params.room)) {
+			callback('Name and room name are required');
+		}
+
+		socket.join(params.room);
+		//socket.leave('The area fans');
+		
+		// io.emit
+		// socket.broadcast.emit	
+		// socket.emit	
+
+
+		socket.emit('newMessage', generateMessage('Support', 'Welcome to the chat'));
+		socket.broadcast.to(params.room).emit('newMessage', generateMessage('Support', `${params.name} has joined`));
+		callback();
+	});
+
 	socket.on('createMessage', (message, callback) => {
 		console.log('createMessage', message);
-
-		// sockit.emit from admin and text
-		// socket.emit('newMessage', generateMessage('Admin', 'Welcome to chat'));
 		io.emit('newMessage', generateMessage(message.from, message.text));
 		callback();
-		// send message from one way and reseve it from one way , so open two tabbs and check
-		// socket.broadcast.emit('newMessage', {
-		// from: message.from,
-		// text: message.text,
-		// createdAt: new Date().getTime()
-		// });
 	});
 
 	socket.on('createLocationMessage', (coords) => {
