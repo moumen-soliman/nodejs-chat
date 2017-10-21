@@ -69,13 +69,6 @@ socket.on('newLocationMessage', function (message) {
 	scrollToBottom();
 });
 
-socket.emit('createMessage', {
-	from: 'Rezk',
-	text: 'Ahlan'
-}, function (data) {
-	console.log('Got it', data);
-});
-
 jQuery('#message-form').on('submit', function (e) {
 	e.preventDefault();
 
