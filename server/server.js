@@ -30,7 +30,7 @@ io.on('connection', (socket) => { //related to socket in html file
 		users.addUser(socket.id, params.name, params.room);
 
 		io.to(params.room).emit('updateUserList', users.getUserList(params.room));
-		socket.emit('newMessage', generateMessage('Support', 'Welcome to the chat'));
+		socket.emit('newMessage', generateMessage('Support', `Welcome to ${params.room} chat`));
 		socket.broadcast.to(params.room).emit('newMessage', generateMessage('Support', `${params.name} has joined`));
 		callback();
 	});
