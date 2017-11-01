@@ -1,0 +1,12 @@
+{
+  "test": {
+    "port": 3000,
+    "MONGODB_URI": "mongodb://moumensoliman:12345678@ds141185.mlab.com:41185/nodejs-chatapp-test",
+    "JWT_SECRET": "thisrandomishardfixtoastring"
+  },
+  "development": {
+    "port": 3000,
+    "MONGODB_URI": "mongodb://moumensoliman:12345678@ds243295.mlab.com:43295/nodejs-chatapp",
+    "JWT_SECRET": "jksjdkjbh3hbj3hjbjh3bjhda2"
+  }
+}
