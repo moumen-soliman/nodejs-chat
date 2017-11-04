@@ -1,11 +1,18 @@
+require('./config/config');
+require('./db/mongoose');
+
+const _ = require('lodash');
 const path = require('path');
 const http = require('http');
+const bodyParser = require('body-parser');
 const express = require('express');
 const socketIO = require('socket.io');
 
+const {ObjectID} = require('mongodb');
 const {generateMessage, generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
 const {Users} = require('./utils/users');
+const {Room} = require('./models/room');
 
 const publicPath = path.join(__dirname, '../public');
 const port = process.env.PORT || 3000;
@@ -14,6 +21,7 @@ var server = http.createServer(app);
 var io = socketIO(server);
 var users = new Users();
 
+app.use( bodyParser.json() );
 app.use(express.static(publicPath));
 
 io.on('connection', (socket) => { //related to socket in html file
