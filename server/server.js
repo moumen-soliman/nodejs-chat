@@ -145,6 +145,37 @@ io.on('connection', (socket) => { //related to socket in html file
             callback(e);
         });
     });
+
+	  socket.on('signIn', (userClient, callback) => {
+	    let temp_user;
+	    User.findByCredentials(userClient.email, userClient.password).then( (user) => {
+	      temp_user = user;
+	      return user.generateAuthToken();
+	    }).then( (token) =>{
+	      callback(token, temp_user);
+	    }).catch( (e) => {
+	      callback();
+	    });
+	  });
+
+	  socket.on('signOut', (userClient, callback) => {
+
+	    //Returns true if token is removed
+
+	    User.findByToken(userClient.token).then( (user) =>{
+	      if(!user){
+	        return Promise.reject();
+	      }
+	      return user.removeToken(userClient.token);
+
+	    }).then( () =>{
+	      callback(true);
+	    }).catch( (e) => {
+	      callback(false);
+	    });
+
+	  });
+	  
     socket.on('disconnect', () => {
         var user = users.removeUser(socket.id);
 
