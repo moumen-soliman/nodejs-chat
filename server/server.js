@@ -44,12 +44,18 @@ io.on('connection', (socket) => { //related to socket in html file
 	});
 
 	socket.on('createMessage', (message, callback) => {
-		var user = users.getUser(socket.id);
-
-		if (user && isRealString(message.text)) {
-			io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
-		}
-		callback();
+		let tmp_room;
+		Room.findById(newMessage.room_id).then( (roomDoc) => {
+			tmp_room = roomDoc;
+			if(tmp_room && isRealString(newMessage.text)){
+				return roomDoc.addMessage(generateMessage(newMessage.user_name, newMessage.text));
+			}else{
+				return Promise.reject();
+			}
+		}).then( (messageDoc) => {
+			io.to(tmp_room._id).emit('newMessage', generateMessage(user.name, message.text));
+			callback();
+		});
 	});
 
 	socket.on('createLocationMessage', (coords) => {
