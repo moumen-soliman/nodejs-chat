@@ -146,56 +146,56 @@ io.on('connection', (socket) => { //related to socket in html file
         });
     });
 
-	  socket.on('signIn', (userClient, callback) => {
-	    let temp_user;
-	    User.findByCredentials(userClient.email, userClient.password).then( (user) => {
-	      temp_user = user;
-	      return user.generateAuthToken();
-	    }).then( (token) =>{
-	      callback(token, temp_user);
-	    }).catch( (e) => {
-	      callback();
-	    });
-	  });
+    socket.on('signIn', (userClient, callback) => {
+        let temp_user;
+        User.findByCredentials(userClient.email, userClient.password).then((user) => {
+            temp_user = user;
+            return user.generateAuthToken();
+        }).then((token) => {
+            callback(token, temp_user);
+        }).catch((e) => {
+            callback();
+        });
+    });
 
-	  socket.on('signOut', (userClient, callback) => {
+    socket.on('signOut', (userClient, callback) => {
 
-	    //Returns true if token is removed
+        //Returns true if token is removed
 
-	    User.findByToken(userClient.token).then( (user) =>{
-	      if(!user){
-	        return Promise.reject();
-	      }
-	      return user.removeToken(userClient.token);
+        User.findByToken(userClient.token).then((user) => {
+            if (!user) {
+                return Promise.reject();
+            }
+            return user.removeToken(userClient.token);
 
-	    }).then( () =>{
-	      callback(true);
-	    }).catch( (e) => {
-	      callback(false);
-	    });
+        }).then(() => {
+            callback(true);
+        }).catch((e) => {
+            callback(false);
+        });
 
-	  });
-	  
-  socket.on('disconnect', () => {
+    });
 
-    if( socket._customdata ){
-      let params = socket._customdata;
-      let tmp_room;
-      Room.findById(params.room_id).then( (roomDoc) => {
-        tmp_room = roomDoc;
-        return tmp_room.removeUser(params.user_id);
-      }).then( (userDoc) => {
-        tmp_room.users = tmp_room.users.filter( user => user._id != params.user_id);
-        io.to(params.room_id).emit('updateUserList', tmp_room.users);
-        io.to(params.room_id).emit('newMessage', generateMessage('Admin', `${params.user_name} has left.`));
+    socket.on('disconnect', () => {
 
-        console.log(`${params.user_name} has left room \'${tmp_room.name}\'`);
-      }).catch( (e) => {
-        console.log('error:' +e);
-      });
-    }
+        if (socket._customdata) {
+            let params = socket._customdata;
+            let tmp_room;
+            Room.findById(params.room_id).then((roomDoc) => {
+                tmp_room = roomDoc;
+                return tmp_room.removeUser(params.user_id);
+            }).then((userDoc) => {
+                tmp_room.users = tmp_room.users.filter(user => user._id != params.user_id);
+                io.to(params.room_id).emit('updateUserList', tmp_room.users);
+                io.to(params.room_id).emit('newMessage', generateMessage('Admin', `${params.user_name} has left.`));
 
-  });
+                console.log(`${params.user_name} has left room \'${tmp_room.name}\'`);
+            }).catch((e) => {
+                console.log('error:' + e);
+            });
+        }
+
+    });
 });
 
 server.listen(port, () => {
