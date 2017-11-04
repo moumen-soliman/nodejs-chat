@@ -1,29 +1,95 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8">
-	<title>NodeJS Join page - Mo'men Soliman</title>
-	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-	<link rel="stylesheet" href="/css/style.css">
-</head>
-<body class="centered-form">
-	<div class="centered-form__form">
-		<form action="/chat.html">
-			<div class="form-field">
-				<h3>Join a Chat</h3>
-			</div>
-			<div class="form-field">
-				<label>Name</label>
-				<input type="text" name="name" autofocus>
-			</div>
-			<div class="form-field">
-				<label>Room Name</label>
-				<input type="text" name="room" autofocus>
-			</div>
-			<div class="form-field">
-				<button>Join</button>
-			</div>
-		</form>
-	</div>
-</body>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <title>Join | Chat App</title>
+    <link rel="stylesheet" href="/css/styles.css">
+  </head>
+  <body class="centered-form">
+    <div id="main-container" class="centered-form__form invisible">
+      <form id="join-form" class="invisible" >
+        <div class="form-field">
+          <h3>Welcome</h3>
+        </div>
+        <div class="form-field">
+          <label> E-mail</label>
+          <input type="text" name="email" autofocus>
+        </div>
+        <div class="form-field">
+          <label>Password</label>
+          <input type="password" name="password" >
+        </div>
+        <div class="form-field">
+          <button class="blue">Sign In</button>
+        </div>
+
+        <div class="form-field">
+          <label >Don't have an account?</label>
+          <button id="sign_up" class="green" type="button">Sign Up!</button>
+        </div>
+      </form>
+
+      <form id="sign-form" class="invisible" >
+        <div class="form-field">
+          <h3>Create an account</h3>
+        </div>
+        <div class="form-field">
+          <label> Display name</label>
+          <input type="text" name="s_name" autofocus>
+        </div>
+        <div class="form-field">
+          <label> E-mail</label>
+          <input type="text" name="s_email" autofocus>
+        </div>
+        <div class="form-field">
+          <label> Password</label>
+          <input type="password" name="s_password" autofocus>
+        </div>
+        <div class="form-field">
+          <button class="green">Sign Up!</button>
+        </div>
+
+        <div class="form-field">
+          <label >Already have an account?</label>
+          <button id="sign_in" class="blue" type="button">Sign In</button>
+        </div>
+      </form>
+
+      <form id="room-form" class="invisible">
+        <div class="form-field">
+          <h3>Hi <span id="userName"> <!--Username will be append here--></span>, please chose your room</h3>
+        </div>
+        <div class="form-field">
+          <label> Online rooms </label>
+          <select id="room-selector">
+            <!--Rooms will be append here-->
+          </select>
+
+        </div>
+        <div id="new-room" class="form-field" style="display:none">
+          <label> New room </label>
+          <input type="text" name="roomName" autofocus maxlength="45">
+        </div>
+        <div class="form-field">
+          <button class="blue">Join!</button>
+        </div>
+        <div class="form-field">
+          <button id="sign_out" class="red" type="button">Sign Out</button>
+        </div>
+      </form>
+
+      <script id="rooms-template" type="text/template">
+              {{#rooms}}
+              <option value={{index}}>{{name}}</option>
+              {{/rooms}}
+      </script>
+
+    </div>
+  <script src = "/socket.io/socket.io.js" type="text/javascript"></script>
+  <script src = "/js/libs/jquery-3.2.1.min.js" type="text/javascript"> </script>
+  <script src = "/js/libs/mustache.js" type="text/javascript"> </script>
+  <script src = "/js/libs/deparam.js" type="text/javascript"> </script>
+  <script src = "/js/index.js" type="text/javascript"> </script>
+  </body>
 </html>
