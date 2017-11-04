@@ -52,9 +52,10 @@ UserSchema.methods.generateAuthToken = function (){
   let token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
 
   user.tokens.push({access, token});
+
   return user.save().then( () => {
     return token;
-  });
+  } );
 };
 
 UserSchema.methods.removeToken = function (token){
@@ -82,6 +83,7 @@ UserSchema.statics.findByToken = function (token){
     'tokens.token': token,
     'tokens.access': 'auth'
   });
+
 };
 
 UserSchema.statics.findByCredentials = function (email, password){
@@ -101,6 +103,8 @@ UserSchema.statics.findByCredentials = function (email, password){
       });
     } )
   });
+
+
 };
 
 UserSchema.pre('save', function (next){

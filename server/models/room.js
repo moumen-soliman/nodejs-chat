@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-const RoomSchema = new.mongoose.Schema({
+const RoomSchema = new mongoose.Schema({
   name: {
     type: String,
     unique: true,
@@ -31,14 +31,15 @@ const RoomSchema = new.mongoose.Schema({
   users:[{
     name: String
   }]
+
 });
 
+RoomSchema.methods.addMessage = function(message){
 
-RoomSchema.methods.addMessage = function(message) {
   this.messages.push(message);
 
   return this.save().then( () => message );
-}
+};
 
 RoomSchema.methods.getUsers = function(){
   return this.users;
