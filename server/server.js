@@ -59,12 +59,33 @@ io.on('connection', (socket) => { //related to socket in html file
 	});
 
 	socket.on('createLocationMessage', (coords) => {
-		var user = users.getUser(socket.id);
+	    let tmp_room;
+	    Room.findById(newMessage.room_id).then( (roomDoc) => {
+	      tmp_room = roomDoc;
+	      if(tmp_room && newMessage.latitude && newMessage.longitude){
+	        return roomDoc.addMessage(generateLocationMessage(newMessage.user_name,newMessage.latitude, newMessage.longitude));
+	      }else {
+	        return Promise.reject();
+	      }
+	    }).then( (messageDoc) => {
+	      io.to(tmp_room._id).emit('newMessage', generateLocationMessage(newMessage.user_name,newMessage.latitude, newMessage.longitude));
+	    });
+	});
 
-		if (user) {
-			io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));			
-		}
+	socket.on('getRoom', (params, callback) => {
+		Room.findOne({name: params.name}).then ( (roomDoc) => {
+			callback(roomDoc);
+		}).catch( (e) => {
+			callback();
+		});
+	});
 
+	socket.on('getRoomList', (callback) => {
+		Room.getRoomList().then( (roomList) => {
+			callback(roomList);
+		}).catch( (e) => {
+			callback();
+		});
 	});
 
 	socket.on('disconnect', () => {
