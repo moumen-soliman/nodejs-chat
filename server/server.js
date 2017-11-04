@@ -12,6 +12,7 @@ const {ObjectID} = require('mongodb');
 const {generateMessage, generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
 const {Users} = require('./utils/users');
+const {User} = require('./models/user');
 const {Room} = require('./models/room');
 
 const publicPath = path.join(__dirname, '../public');
