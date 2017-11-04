@@ -24,6 +24,13 @@ var users = new Users();
 app.use( bodyParser.json() );
 app.use(express.static(publicPath));
 
+Room.cleanAllUserList().then( () => {
+  console.log('Rooms were cleaned');
+}).catch( (e) =>{
+  console.log(e);
+});
+
+
 io.on('connection', (socket) => { //related to socket in html file
 	console.log('New user connected');
 
