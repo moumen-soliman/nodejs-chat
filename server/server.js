@@ -176,14 +176,26 @@ io.on('connection', (socket) => { //related to socket in html file
 
 	  });
 	  
-    socket.on('disconnect', () => {
-        var user = users.removeUser(socket.id);
+  socket.on('disconnect', () => {
 
-        if (user) {
-            io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-            io.to(user.room).emit('newMessage', generateMessage('Support', `${user.name} has left`));
-        }
-    });
+    if( socket._customdata ){
+      let params = socket._customdata;
+      let tmp_room;
+      Room.findById(params.room_id).then( (roomDoc) => {
+        tmp_room = roomDoc;
+        return tmp_room.removeUser(params.user_id);
+      }).then( (userDoc) => {
+        tmp_room.users = tmp_room.users.filter( user => user._id != params.user_id);
+        io.to(params.room_id).emit('updateUserList', tmp_room.users);
+        io.to(params.room_id).emit('newMessage', generateMessage('Admin', `${params.user_name} has left.`));
+
+        console.log(`${params.user_name} has left room \'${tmp_room.name}\'`);
+      }).catch( (e) => {
+        console.log('error:' +e);
+      });
+    }
+
+  });
 });
 
 server.listen(port, () => {
