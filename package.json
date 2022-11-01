@@ -16,7 +16,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "express": "^4.14.0",
-    "heroku": "^0.2.0",
+    "heroku": "^7.65.0",
     "jsonwebtoken": "^8.1.0",
     "moment": "^2.19.1",
     "mongoose": "^4.13.0",
